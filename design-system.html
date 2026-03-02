@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnJesus DS | System Design & Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --accent: #4A6741;
+            --bg: #FDFCF9;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: #1a1a1a;
+            scroll-behavior: smooth;
+        }
+
+        .code-output {
+            background: #1e1e1e;
+            color: #9cdcfe;
+            padding: 24px;
+            border-radius: 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #333;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            cursor: pointer;
+            border: 1px solid #444;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-12">
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
+
+        <aside class="lg:col-span-1">
+            <div class="sidebar space-y-6">
+                <div class="mb-10">
+                    <h1 class="text-2xl font-800 tracking-tighter">OnJesus <span class="text-gray-300 font-400">DS</span>
+                    </h1>
+                    <p class="text-xs text-gray-400 mt-1 font-600 uppercase tracking-widest">Design System v1.0</p>
+                </div>
+                <nav class="flex flex-col gap-2 text-sm font-600 text-gray-500">
+                    <a href="#componentes" class="hover:text-black">Componentes</a>
+                    <a href="#categorias" class="hover:text-black">Categorias & Cores</a>
+                    <a href="#editor" class="text-[#4A6741] font-800">Study Builder (JS Object)</a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="lg:col-span-3 space-y-20">
+
+            <section id="componentes">
+                <h2 class="text-3xl font-800 mb-6 tracking-tight">Componentes Core</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-white border rounded-[32px] shadow-sm">
+                        <h4 class="font-800 text-xs mb-4 text-gray-400 uppercase tracking-widest">Swipe Card</h4>
+                        <div class="w-48 h-64 bg-gray-50 border rounded-[32px] mx-auto flex flex-col p-4 shadow-sm">
+                            <div
+                                class="h-32 bg-white rounded-[24px] mb-4 flex items-center justify-center text-4xl shadow-sm">
+                                🌿</div>
+                            <div class="h-2 w-1/2 bg-gray-200 rounded-full mb-2"></div>
+                            <div class="h-4 w-3/4 bg-gray-800 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white border rounded-[32px] shadow-sm">
+                        <h4 class="font-800 text-xs mb-4 text-gray-400 uppercase tracking-widest">Typography</h4>
+                        <p class="text-4xl font-800 tracking-tighter mb-2">Plus Jakarta</p>
+                        <p class="text-gray-500 text-sm leading-relaxed">Usamos pesos 400 (corpo), 600 (semi-bold) e 800
+                            (títulos) para criar contraste máximo.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="categorias">
+                <h2 class="text-3xl font-800 mb-6 tracking-tight">System Colors</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-xs font-800 text-gray-400 uppercase border-b">
+                                <th class="pb-4">Categoria</th>
+                                <th class="pb-4">Primária</th>
+                                <th class="pb-4">Fundo (BG)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm font-600">
+                            <tr>
+                                <td class="py-4">História</td>
+                                <td class="py-4 text-[#4A6741]">#4A6741</td>
+                                <td class="py-4"><span class="px-3 py-1 bg-[#F1F3F0] rounded-full">#F1F3F0</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4">Profecia</td>
+                                <td class="py-4 text-[#6A5ACD]">#6A5ACD</td>
+                                <td class="py-4"><span class="px-3 py-1 bg-[#F0F0FA] rounded-full">#F0F0FA</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="editor">
+                <div class="bg-white p-6 md:p-10 rounded-[40px] border shadow-2xl">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-800 tracking-tighter">Study Builder</h2>
+                        <p class="text-gray-400 mt-2">Crie a estrutura do objeto JS para o `studies` em segundos.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">ID Único (key)</label>
+                                <input type="text" id="ed-id" placeholder="ex: pentateuco"
+                                    class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none focus:ring-2 ring-[#4A6741]/20">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">Título</label>
+                                <input type="text" id="ed-title" placeholder="Nome do estudo"
+                                    class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="ed-author" placeholder="Autor (ex: João Silva)"
+                                class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                            <input type="text" id="ed-date" placeholder="Data (ex: 12 Out 2023)"
+                                class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">Categoria</label>
+                            <select id="ed-cat" class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none">
+                                <option value="historia">História</option>
+                                <option value="profecia">Profecia</option>
+                                <option value="sabedoria">Sabedoria</option>
+                            </select>
+                        </div>
+
+                        <div id="steps-container" class="space-y-4 pt-6">
+                        </div>
+
+                        <button onclick="addStep()"
+                            class="w-full py-4 border-2 border-dashed border-gray-200 rounded-3xl text-gray-400 font-800 hover:border-[#4A6741] hover:text-[#4A6741] transition">+
+                            NOVO BLOCO DE CONTEÚDO</button>
+
+                        <div class="pt-6">
+                            <button onclick="generateJSObject()"
+                                class="w-full bg-black text-white py-5 rounded-3xl font-800 shadow-xl hover:scale-[1.02] active:scale-95 transition">GERAR
+                                OBJETO JAVASCRIPT</button>
+                        </div>
+
+                        <div class="mt-8">
+                            <h3 class="text-xs font-800 mb-3 text-gray-400 uppercase tracking-widest ml-2">Objeto Pronto
+                                para Copiar:</h3>
+                            <div class="code-output">
+                                <div class="copy-btn" onclick="copyCode()">COPIAR</div>
+                                <pre id="js-output">// O objeto aparecerá aqui...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function addStep() {
+            const container = document.getElementById('steps-container');
+            const stepNum = container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = "step-entry bg-white p-6 rounded-3xl border shadow-sm space-y-3";
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-800 bg-black text-white px-3 py-1 rounded-full uppercase">Bloco ${stepNum}</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" placeholder="Ícone (🌳)" class="ed-step-icon p-3 border rounded-xl text-sm">
+                    <input type="text" placeholder="Cabeçalho" class="ed-step-head p-3 border rounded-xl text-sm col-span-2">
+                </div>
+                <textarea placeholder="Conteúdo (Um parágrafo por linha)" class="ed-step-content w-full p-3 border rounded-xl h-24 text-sm"></textarea>
+            `;
+            container.appendChild(div);
+        }
+
+        function generateJSObject() {
+            const id = document.getElementById('ed-id').value || "novo_estudo";
+            const title = document.getElementById('ed-title').value;
+            const category = document.getElementById('ed-cat').value;
+            const author = document.getElementById('ed-author').value || "Equipe OnJesus";
+            const date = document.getElementById('ed-date').value || "Hoje";
+            let stepsJS = "";
+            document.querySelectorAll('.step-entry').forEach((el, idx) => {
+                const icon = el.querySelector('.ed-step-icon').value;
+                const head = el.querySelector('.ed-step-head').value;
+                const content = el.querySelector('.ed-step-content').value.split('\n').filter(p => p.trim() !== "");
+              
+                const contentFormatted = content.map(p => `\n                "${p}"`).join(',');
+
+                stepsJS += `        {
+                    type: "intro",
+                    icon: "${icon}",
+                    head: "${head}",
+                    content: [${contentFormatted}
+                    ]
+                }${idx < document.querySelectorAll('.step-entry').length - 1 ? ',' : ''}\n`;
+            });
+
+            const result = `${id}: {
+                title: "${title}",
+                category: "${category}",
+                author: "${author}",
+                date: "${date}",
+                image: "",
+                icon: "${document.querySelector('.ed-step-icon')?.value || '📖'}",
+                steps: [\n${stepsJS}    ]
+            },`;
+
+            document.getElementById('js-output').innerText = result;
+        }
+
+        function copyCode() {
+            const code = document.getElementById('js-output').innerText;
+            navigator.clipboard.writeText(code);
+            alert("Objeto copiado!");
+        }
+
+        // Inicializa com um passo
+        addStep();
+    </script>
+</body>
+
+</html>
