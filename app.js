@@ -17,7 +17,7 @@ const App = {
             steps: [
                 {
                     type: "intro",
-                    image:"/res/img_1.png",
+                    image: "/res/img_1.png",
                     icon: "",
                     head: "A falsa sensação",
                     content: [
@@ -59,10 +59,10 @@ const App = {
                     icon: "📖",
                     author: "Romanos 3:23-26 NVI",
                     text: [
-                "pois todos pecaram e estão destituídos da glória de Deus, sendo justificados gratuitamente por sua graça, por meio da redenção que há em Cristo Jesus. Deus o ofereceu como sacrifício para expiação pelo seu sangue, para ser recebido pela fé, de forma a demonstrar sua justiça. Isto porque, na sua tolerância, deixou impunes os pecados anteriormente cometidos. Todavia, no presente, Deus demonstrou a sua justiça, a fim de ser justo e justificador daquele que tem fé em Jesus."
+                        "pois todos pecaram e estão destituídos da glória de Deus, sendo justificados gratuitamente por sua graça, por meio da redenção que há em Cristo Jesus. Deus o ofereceu como sacrifício para expiação pelo seu sangue, para ser recebido pela fé, de forma a demonstrar sua justiça. Isto porque, na sua tolerância, deixou impunes os pecados anteriormente cometidos. Todavia, no presente, Deus demonstrou a sua justiça, a fim de ser justo e justificador daquele que tem fé em Jesus."
                     ]
                 },
-    
+
             ]
         },
     },
@@ -116,85 +116,54 @@ const App = {
     },
 
     openStudy(id) {
-        document.getElementById('home-footer').classList.add('hidden');
+        const footer = document.getElementById('home-footer');
+        if (footer) footer.classList.add('hidden');
+
         const study = this.studies[id];
         const cat = this.categories[study.category];
         const container = document.getElementById('timeline-content');
 
-        // Aplica cores dinâmicas
+        // Cores dinâmicas
         document.documentElement.style.setProperty('--current-cat-color', cat.color);
-        const indicator = document.getElementById('scroll-indicator');
-        if (indicator) indicator.className = 'dynamic-color';
-
         document.getElementById('study-title').innerText = study.title;
         container.innerHTML = '';
 
-        const headerInfo = document.createElement('div');
-        headerInfo.className = "text-[10px] font-800 text-gray-400 uppercase tracking-[0.2em] mt-4 opacity-60";
-        headerInfo.innerText = `Escrito por ${study.author} em ${study.date}`;
-
-        const headerElement = document.querySelector('#study-view header');
-        // Remove info antiga se existir para não duplicar
-        const oldInfo = headerElement.querySelector('.author-info');
-        if (oldInfo) oldInfo.remove();
-
-        headerInfo.classList.add('author-info');
-        headerElement.appendChild(headerInfo)
-
-       
-        
         study.steps.forEach(step => {
             const wrapper = document.createElement('div');
             wrapper.className = 'timeline-item';
 
-             const stepMedia = step.image 
-            ? `<img src="${step.image}" class="w-full h-full object-cover">` 
-            : step.icon;
-
-            // LÓGICA DE RENDERIZAÇÃO POR TIPO
             if (step.type === "intro") {
+                // Criamos um ID único para o loader desta imagem específica
+                const loaderId = `loader-${Math.random().toString(36).substr(2, 9)}`;
+
                 wrapper.innerHTML = `
-                    <div class="illustration-box dynamic-bg mb-10 h-72 text-8xl flex items-center justify-center overflow-hidden rounded-3xl">
-                        ${stepMedia}
-                    </div>
-                    <div class="reading-content text-left">
-                        <h2 class="text-4xl font-800 mb-6 tracking-tight" style="color: var(--current-cat-color)">${step.head}</h2>
-                        ${step.content.map(p => `<p class="main-text mb-4 text-gray-600 leading-relaxed">${p}</p>`).join('')}
-                    </div>
-                `;
+                <div class="illustration-box mb-10 h-72 relative overflow-hidden rounded-3xl bg-gray-100">
+                    <div id="${loaderId}" class="absolute inset-0 skeleton"></div>
+                    
+                    <img src="${step.image}" 
+                         class="w-full h-full object-cover opacity-0 img-fluid"
+                         loading="lazy"
+                         onload="this.classList.remove('opacity-0'); document.getElementById('${loaderId}').style.display='none';">
+                </div>
+                <div class="reading-content text-left">
+                    <h2 class="text-4xl font-800 mb-6 tracking-tight" style="color: var(--current-cat-color)">${step.head}</h2>
+                    ${step.content.map(p => `<p class="main-text mb-4 text-gray-600 leading-relaxed">${p}</p>`).join('')}
+                </div>
+            `;
             }
             else if (step.type === "quote") {
                 wrapper.innerHTML = `
-                    <div class="reading-content">
-                        <blockquote class="pull-quote italic border-l-4 pl-6 py-2 my-10 text-2xl font-semibold" style="border-color: var(--current-cat-color); color: var(--current-cat-color)">
-                            "${step.text}"
-                            <cite class="block text-sm mt-2 text-gray-400 not-italic">— ${step.author || ''}</cite>
-                        </blockquote>
-                    </div>
-                `;
-            }
-            else if (step.type === "insight") {
-                wrapper.innerHTML = `
-                    <div class="reading-content">
-                        <div class="insight-card p-8 rounded-3xl my-10" style="background-color: #f3f4f6; border-left: 8px solid var(--current-cat-color)">
-                            <h4 class="text-xs font-800 uppercase tracking-widest mb-2" style="color: var(--current-cat-color)">${step.head}</h4>
-                            <p class="text-md leading-relaxed text-gray-700">${step.text}</p>
-                        </div>
-                    </div>
-                `;
+                <div class="reading-content">
+                    <blockquote class="pull-quote italic border-l-4 pl-6 py-2 my-10 text-2xl font-semibold" style="border-color: var(--current-cat-color); color: var(--current-cat-color)">
+                        "${step.text}"
+                        <cite class="block text-sm mt-2 text-gray-400 not-italic">— ${step.author || ''}</cite>
+                    </blockquote>
+                </div>
+            `;
             }
 
             container.appendChild(wrapper);
         });
-
-        const signature = document.createElement('div');
-        signature.className = 'py-20 text-center opacity-0 visible transition-opacity duration-1000';
-        signature.innerHTML = `
-            <div class="h-px w-12 bg-gray-100 mx-auto mb-8"></div>
-            <p class="text-[10px] font-800 text-gray-300 uppercase tracking-[0.3em] mb-2">Soli Deo Gloria</p>
-            <p class="text-xs text-gray-400 italic">"Pois d'Ele, por Ele e para Ele são todas as coisas."</p>
-        `;
-        container.appendChild(signature);
 
         document.getElementById('home-view').classList.add('hidden');
         document.getElementById('study-view').classList.remove('hidden');
