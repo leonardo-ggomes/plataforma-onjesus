@@ -8,12 +8,12 @@ const App = {
 
     studies: {
         pecado: {
-            title: "Não consigo vencer o pecado?",
+            title: "Lutando contra o pecado?",
             category: "sabedoria",
             author: "Leonardo Garcia",
             date: "03 Mar 2026",
             image: "",
-            icon: "✝️",
+            icon: "🥊",
             steps: [
                 {
                     type: "intro",
