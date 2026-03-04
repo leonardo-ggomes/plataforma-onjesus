@@ -12,12 +12,13 @@ const App = {
             category: "sabedoria",
             author: "Leonardo Garcia",
             date: "03 Mar 2026",
-            image: "",
+            image: "/res/img_1.png",
             icon: "✝️",
             steps: [
                 {
                     type: "intro",
-                    icon: "😩",
+                    image:"/res/img_1.png",
+                    icon: "",
                     head: "A falsa sensação",
                     content: [
                         "Vivemos dias em que falar sobre pecado parece inadequado. O termo soa pesado, desconfortável, quase ofensivo. Preferimos palavras mais suaves, conceitos mais aceitáveis. No entanto, ignorar o pecado não o faz desaparecer — apenas o torna mais silencioso e mais perigoso.",
@@ -29,6 +30,7 @@ const App = {
                 },
                 {
                     type: "intro",
+                    image: "/res/img_2.png",
                     icon: "🕊️",
                     head: "Um esperança",
                     content: [
@@ -40,7 +42,8 @@ const App = {
                 },
                 {
                     type: "intro",
-                    icon: "✝️",
+                    image: "/res/img_3.png",
+                    icon: "",
                     head: "A resposta",
                     content: [
                         "Talvez hoje você perceba áreas da sua vida onde o pecado tem sussurrado mentiras. Talvez exista um peso que você carrega em silêncio. Saiba que a graça é maior do que qualquer falha.",
@@ -138,14 +141,22 @@ const App = {
         headerInfo.classList.add('author-info');
         headerElement.appendChild(headerInfo)
 
+       
+        
         study.steps.forEach(step => {
             const wrapper = document.createElement('div');
             wrapper.className = 'timeline-item';
 
+             const stepMedia = step.image 
+            ? `<img src="${step.image}" class="w-full h-full object-cover">` 
+            : step.icon;
+
             // LÓGICA DE RENDERIZAÇÃO POR TIPO
             if (step.type === "intro") {
                 wrapper.innerHTML = `
-                    <div class="illustration-box dynamic-bg mb-10 h-72 text-8xl">${step.icon}</div>
+                    <div class="illustration-box dynamic-bg mb-10 h-72 text-8xl flex items-center justify-center overflow-hidden rounded-3xl">
+                        ${stepMedia}
+                    </div>
                     <div class="reading-content text-left">
                         <h2 class="text-4xl font-800 mb-6 tracking-tight" style="color: var(--current-cat-color)">${step.head}</h2>
                         ${step.content.map(p => `<p class="main-text mb-4 text-gray-600 leading-relaxed">${p}</p>`).join('')}
