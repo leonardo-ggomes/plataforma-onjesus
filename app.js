@@ -8,7 +8,7 @@ const App = {
 
     studies: {
         pecado: {
-            title: "Não consigo vencer o pecado?",
+            title: "Lutando contra o pecado?",
             category: "sabedoria",
             author: "Leonardo Garcia",
             date: "03 Mar 2026",
@@ -32,7 +32,7 @@ const App = {
                     type: "intro",
                     image: "/res/img_2.png",
                     icon: "🕊️",
-                    head: "Um esperança",
+                    head: "Uma esperança",
                     content: [
                         "Antes mesmo que pedíssemos ajuda, Ele já havia providenciado redenção. Jesus Cristo não veio apenas para melhorar comportamentos — Ele veio para restaurar relacionamentos. Seu sacrifício não foi simbólico; foi substitutivo. Ele assumiu aquilo que nos condenava para que pudéssemos receber aquilo que não merecíamos: graça.",
                         "Na cruz, não houve apenas dor física. Houve amor intencional. Houve reconciliação sendo construída. Houve um caminho sendo aberto de volta ao Pai.",
