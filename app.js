@@ -6,90 +6,60 @@ const App = {
         sabedoria: { name: "Sabedoria", class: "cat-sabedoria", color: "#4682B4" }
     },
 
-   studies: {
-        alianca: {
-            title: "A Grande Aliança",
-            category: "historia",
-            image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800",
-            icon: "🌳",
-            author: "Equipe OnJesus",
-            date: "Hoje",
-            steps: [
-                { 
-                    type: "intro",
-                    icon: "✨", 
-                    head: "O Mandato Cultural", 
-                    content: [
-                        "No princípio, a narrativa bíblica não começa com regras, mas com um projeto de expansão. Deus cria um jardim e coloca o ser humano ali como um parceiro.",
-                        "Este mandato envolvia cultivar a terra e extrair o potencial da criação, transformando o jardim em uma cidade que refletisse a glória do Criador."
-                    ]
-                },
-                {
-                    type: "quote",
-                    text: "A fé não é apenas acreditar em algo, é confiar em Alguém enquanto caminhamos no desconhecido.",
-                    author: "Reflexão OnJesus"
-                },
-                {
-                    type: "insight",
-                    head: "VOCÊ SABIA?",
-                    text: "A palavra hebraica para 'cultivar' (Abad) é a mesma usada para 'adorar'. No projeto original, trabalho e adoração eram a mesma coisa."
-                }
-            ]
-        },
-        // NOVO ESTUDO ADICIONADO ABAIXO
-        reino: {
-            title: "O Reino de Cabeça para Baixo",
+    studies: {
+        pecado: {
+            title: "Não consigo vencer o pecado?",
             category: "sabedoria",
-            image: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=800",
-            icon: "👑",
-            author: "Equipe OnJesus",
-            date: "Hoje",
+            author: "Leonardo Garcia",
+            date: "03 Mar 2026",
+            image: "",
+            icon: "✝️",
             steps: [
-                { 
+                {
                     type: "intro",
-                    icon: "🕊️", 
-                    head: "A Chegada do Rei", 
+                    icon: "😩",
+                    head: "A falsa sensação",
                     content: [
-                        "Diferente dos impérios que o mundo conhecia, Jesus não chega com exércitos, mas com um convite. Ele anuncia um Reino onde os últimos são os primeiros.",
-                        "Sua autoridade não vinha da força bruta, mas de uma compaixão que desafiava as estruturas religiosas e políticas da época."
+                        "Vivemos dias em que falar sobre pecado parece inadequado. O termo soa pesado, desconfortável, quase ofensivo. Preferimos palavras mais suaves, conceitos mais aceitáveis. No entanto, ignorar o pecado não o faz desaparecer — apenas o torna mais silencioso e mais perigoso.",
+                        "O pecado não começa como uma grande queda. Ele nasce pequeno, quase imperceptível. Uma escolha aparentemente inofensiva. Um pensamento alimentado em segredo. Uma atitude justificada pela emoção do momento. Aos poucos, aquilo que parecia controlável passa a nos controlar.",
+                        "Ele promete prazer, mas entrega vazio. Promete liberdade, mas produz prisão. Promete autonomia, mas nos afasta da verdadeira vida.",
+                        "A dor mais profunda do pecado não está apenas nas consequências externas. Está na distância que ele cria entre nós e Deus. É uma separação sutil, mas real. A oração já não flui com a mesma leveza. A consciência pesa. A alegria espiritual diminui. E, ainda que continuemos vivendo normalmente por fora, algo dentro de nós sabe que não estamos inteiros.",
+                        "Mas aqui está o ponto central do Evangelho: Deus nunca nos abandonou à própria condição."
+                    ]
+                },
+                {
+                    type: "intro",
+                    icon: "🕊️",
+                    head: "Um esperança",
+                    content: [
+                        "Antes mesmo que pedíssemos ajuda, Ele já havia providenciado redenção. Jesus Cristo não veio apenas para melhorar comportamentos — Ele veio para restaurar relacionamentos. Seu sacrifício não foi simbólico; foi substitutivo. Ele assumiu aquilo que nos condenava para que pudéssemos receber aquilo que não merecíamos: graça.",
+                        "Na cruz, não houve apenas dor física. Houve amor intencional. Houve reconciliação sendo construída. Houve um caminho sendo aberto de volta ao Pai.",
+                        "O pecado nos afasta, mas o arrependimento nos aproxima.",
+                        "Arrependimento não é culpa permanente; é mudança de direção. É reconhecer que o caminho escolhido não nos levou à vida e decidir retornar Àquele que sempre nos esperou. Deus não recebe o arrependido com acusação, mas com braços abertos."
+                    ]
+                },
+                {
+                    type: "intro",
+                    icon: "✝️",
+                    head: "A resposta",
+                    content: [
+                        "Talvez hoje você perceba áreas da sua vida onde o pecado tem sussurrado mentiras. Talvez exista um peso que você carrega em silêncio. Saiba que a graça é maior do que qualquer falha.",
+                        "Em Cristo, não há condenação para quem decide voltar. Há restauração. Há perdão. Há recomeço.",
+                        "A pergunta não é se Deus está disposto a perdoar. A cruz já respondeu isso.",
+                        "A pergunta é: você está disposto a responder?",
+                        "Hoje pode ser o dia de retornar. Hoje pode ser o dia de experimentar novamente a alegria de estar perto de Deus.",
+                        "Ele continua chamando."
                     ]
                 },
                 {
                     type: "quote",
-                    text: "O Reino de Deus não é um lugar para onde você vai, mas um domínio que você permite que governe o seu coração.",
-                    author: "Mestre OnJesus"
-                },
-                {
-                    type: "insight",
-                    head: "CONCEITO CHAVE",
-                    text: "A palavra 'Evangelho' (Euangelion) era usada em Roma para anunciar a vitória de um Imperador. Jesus a usa para anunciar uma vitória sobre a própria morte."
-                },
-                { 
-                    type: "intro",
-                    icon: "🧱", 
-                    head: "Pedras Vivas", 
-                    content: [
-                        "O Reino agora não é feito de templos de pedra, mas de pessoas. Cada seguidor é chamado para ser uma 'mini-representação' dessa nova humanidade."
+                    icon: "📖",
+                    author: "Romanos 3:23-26 NVI",
+                    text: [
+                "pois todos pecaram e estão destituídos da glória de Deus, sendo justificados gratuitamente por sua graça, por meio da redenção que há em Cristo Jesus. Deus o ofereceu como sacrifício para expiação pelo seu sangue, para ser recebido pela fé, de forma a demonstrar sua justiça. Isto porque, na sua tolerância, deixou impunes os pecados anteriormente cometidos. Todavia, no presente, Deus demonstrou a sua justiça, a fim de ser justo e justificador daquele que tem fé em Jesus."
                     ]
-                }
-            ]
-        },
-        Pentateuco: {
-            title: "Fé",
-            category: "historia",
-            image: "",
-            icon: "🐦",
-            author: "Equipe OnJesus",
-            date: "Hoje",
-            steps: [
-                {
-                    type: "intro",
-                    icon: "🐦",
-                    head: "Fé",
-                    content: [
-                        "Conteúdo"
-                    ]
-                }
+                },
+    
             ]
         },
     },
@@ -103,21 +73,21 @@ const App = {
 
     renderCards() {
         const deck = document.getElementById('deck-container');
-        if(!deck) return;
+        if (!deck) return;
         deck.innerHTML = '';
-        
+
         Object.keys(this.studies).forEach((key, index) => {
             const study = this.studies[key];
             const cat = this.categories[study.category];
             const card = document.createElement('div');
-            
+
             let statusClass = index === 0 ? "card-active" : (index === 1 ? "card-next" : "card-far");
 
             card.className = `swipe-card ${statusClass} ${cat.class}`;
             card.onclick = () => App.openStudy(key);
 
-            const mediaContent = study.image 
-                ? `<img src="${study.image}" alt="${study.title}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">` 
+            const mediaContent = study.image
+                ? `<img src="${study.image}" alt="${study.title}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">`
                 : study.icon;
 
             card.innerHTML = `
@@ -136,7 +106,7 @@ const App = {
         });
 
         const dotContainer = document.getElementById('dot-indicator');
-        if(dotContainer) {
+        if (dotContainer) {
             dotContainer.innerHTML = Object.keys(this.studies).map(() => `<div class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-300"></div>`).join('');
             this.updateDots(); // Garante que o primeiro ponto comece ativo
         }
@@ -147,12 +117,12 @@ const App = {
         const study = this.studies[id];
         const cat = this.categories[study.category];
         const container = document.getElementById('timeline-content');
-        
+
         // Aplica cores dinâmicas
         document.documentElement.style.setProperty('--current-cat-color', cat.color);
         const indicator = document.getElementById('scroll-indicator');
-        if(indicator) indicator.className = 'dynamic-color';
-        
+        if (indicator) indicator.className = 'dynamic-color';
+
         document.getElementById('study-title').innerText = study.title;
         container.innerHTML = '';
 
@@ -163,7 +133,7 @@ const App = {
         const headerElement = document.querySelector('#study-view header');
         // Remove info antiga se existir para não duplicar
         const oldInfo = headerElement.querySelector('.author-info');
-        if(oldInfo) oldInfo.remove();
+        if (oldInfo) oldInfo.remove();
 
         headerInfo.classList.add('author-info');
         headerElement.appendChild(headerInfo)
@@ -181,7 +151,7 @@ const App = {
                         ${step.content.map(p => `<p class="main-text mb-4 text-gray-600 leading-relaxed">${p}</p>`).join('')}
                     </div>
                 `;
-            } 
+            }
             else if (step.type === "quote") {
                 wrapper.innerHTML = `
                     <div class="reading-content">
@@ -217,7 +187,7 @@ const App = {
 
         document.getElementById('home-view').classList.add('hidden');
         document.getElementById('study-view').classList.remove('hidden');
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         this.initObserver();
     },
 
@@ -225,12 +195,12 @@ const App = {
         document.getElementById('study-view').classList.add('hidden');
         document.getElementById('home-view').classList.remove('hidden');
         document.getElementById('home-footer').classList.remove('hidden'); // Garante que o footer volte
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     },
 
     setupHammer() {
         const deck = document.getElementById('deck-container');
-        if(!deck) return;
+        if (!deck) return;
         const mc = new Hammer(deck);
 
         mc.on("swipeleft", () => {
@@ -285,7 +255,7 @@ const App = {
     showHome() {
         document.getElementById('study-view').classList.add('hidden');
         document.getElementById('home-view').classList.remove('hidden');
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     },
 
     initObserver() {
@@ -300,7 +270,7 @@ const App = {
     updateDots() {
         const dots = document.querySelectorAll('#dot-indicator div');
         dots.forEach((dot, i) => {
-            if(dot) {
+            if (dot) {
                 dot.style.background = (i === this.currentIndex) ? '#4A6741' : '#E5E7EB';
                 dot.style.width = (i === this.currentIndex) ? '12px' : '6px';
             }
@@ -312,7 +282,7 @@ const App = {
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
         const indicator = document.getElementById('scroll-indicator');
-        if(indicator) indicator.style.width = scrolled + "%";
+        if (indicator) indicator.style.width = scrolled + "%";
     }
 };
 
