@@ -1,259 +1,1191 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnJesus DS | System Design & Builder</title>
+    <title>OnJesus Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #4A6741;
-            --bg: #FDFCF9;
+            --bg: #0C0C0E;
+            --surface: #141416;
+            --surface-2: #1C1C1F;
+            --surface-3: #242428;
+            --accent: #B8F55A;
+            --accent-dim: rgba(184,245,90,0.12);
+            --accent-border: rgba(184,245,90,0.25);
+            --text: #F2F0EC;
+            --text-muted: #6B6B75;
+            --text-dim: #3A3A42;
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,255,255,0.12);
+            --danger: #FF6B6B;
+            --spring: cubic-bezier(0.34,1.56,0.64,1);
+            --smooth: cubic-bezier(0.23,1,0.32,1);
         }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
-            color: #1a1a1a;
-            scroll-behavior: smooth;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
         }
 
-        .code-output {
-            background: #1e1e1e;
-            color: #9cdcfe;
-            padding: 24px;
-            border-radius: 16px;
-            font-family: 'Fira Code', monospace;
-            font-size: 13px;
-            line-height: 1.6;
-            position: relative;
+        /* Grain */
+        body::before {
+            content:'';position:fixed;inset:0;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events:none;z-index:9999;opacity:0.35;
         }
 
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #333;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
+        /* ─ SCROLLBAR ─ */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--surface); }
+        ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 2px; }
+
+        /* ─ LAYOUT ─ */
+        .studio-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr 340px;
+            grid-template-rows: 56px 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+        @media (max-width: 1024px) {
+            .studio-layout { grid-template-columns: 1fr; grid-template-rows: auto; height:auto; overflow:auto; }
+            .sidebar, .preview-panel { display: none; }
+        }
+
+        /* ─ TOPBAR ─ */
+        .topbar {
+            grid-column: 1 / -1;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+        .topbar-logo {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        .topbar-logo span { color: var(--accent); font-style: normal; }
+        .topbar-badge {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+        .btn-topbar {
             font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-muted);
             cursor: pointer;
-            border: 1px solid #444;
+            transition: all 0.2s;
+            text-decoration: none;
         }
-
-        .copy-btn:hover {
+        .btn-topbar:hover { color: var(--text); border-color: var(--border-hover); }
+        .btn-topbar.primary {
             background: var(--accent);
+            color: #0C0C0E;
+            border-color: transparent;
+        }
+        .btn-topbar.primary:hover { background: #d4ff85; transform: scale(1.02); }
+
+        /* ─ SIDEBAR ─ */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .sidebar-section-label {
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            padding: 12px 10px 6px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+        .sidebar-link:hover { background: var(--surface-2); color: var(--text); }
+        .sidebar-link.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: var(--accent-border);
+        }
+        .sidebar-link svg { flex-shrink: 0; opacity: 0.7; }
+        .sidebar-link.active svg { opacity: 1; }
+
+        /* Study list items in sidebar */
+        .study-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+        }
+        .study-item:hover { background: var(--surface-2); color: var(--text); }
+        .study-item-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        .sidebar {
-            position: sticky;
-            top: 20px;
+        /* ─ MAIN EDITOR ─ */
+        .editor-panel {
+            overflow-y: auto;
+            padding: 28px 32px;
+            background: var(--bg);
+        }
+
+        /* Form elements */
+        .field-group { margin-bottom: 20px; }
+        .field-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .field-input {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .field-input::placeholder { color: var(--text-dim); }
+        .field-input:focus {
+            border-color: var(--accent-border);
+            background: var(--surface-2);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+        select.field-input { cursor: pointer; appearance: none; }
+        textarea.field-input { resize: none; line-height: 1.6; }
+
+        /* ─ METADATA SECTION ─ */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media(max-width:640px) { .meta-grid { grid-template-columns: 1fr; } }
+
+        /* ─ CAT SELECTOR ─ */
+        .cat-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .cat-option {
+            padding: 10px 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .cat-option:hover { border-color: var(--border-hover); }
+        .cat-option.selected { border-color: var(--option-color); background: color-mix(in srgb, var(--option-color) 10%, transparent); }
+        .cat-option-dot { width: 8px; height: 8px; border-radius: 50%; margin: 0 auto 6px; }
+        .cat-option-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .cat-option.selected .cat-option-label { color: var(--option-color); }
+
+        /* ─ BLOCKS ─ */
+        .blocks-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+        .block-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .block-card:focus-within { border-color: var(--accent-border); }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+        .block-header:hover { background: var(--surface-2); }
+        .block-num {
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            background: var(--surface-3);
+            color: var(--text-muted);
+            padding: 3px 8px;
+            border-radius: 100px;
+        }
+        .block-type-badge {
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 3px 8px;
+            border-radius: 100px;
+            border: 1px solid;
+        }
+        .block-type-intro { color: var(--accent); border-color: var(--accent-border); background: var(--accent-dim); }
+        .block-type-quote { color: #FFD166; border-color: rgba(255,209,102,0.3); background: rgba(255,209,102,0.08); }
+        .block-title-preview {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .block-actions { display: flex; gap: 4px; margin-left: auto; }
+        .block-action-btn {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s;
+            font-size: 11px;
+        }
+        .block-action-btn:hover { color: var(--text); border-color: var(--border-hover); }
+        .block-action-btn.danger:hover { color: var(--danger); border-color: rgba(255,107,107,0.3); }
+        .block-action-btn.move:hover { background: var(--surface-3); }
+
+        .block-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .block-body.collapsed { display: none; }
+
+        .type-toggle {
+            display: flex;
+            gap: 6px;
+        }
+        .type-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .type-btn:hover { border-color: var(--border-hover); color: var(--text); }
+        .type-btn.active-intro { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-border); }
+        .type-btn.active-quote { background: rgba(255,209,102,0.1); color: #FFD166; border-color: rgba(255,209,102,0.3); }
+
+        /* Quote fields toggle */
+        .intro-fields, .quote-fields { transition: all 0.3s; }
+
+        /* Add block buttons */
+        .add-block-row {
+            display: flex;
+            gap: 8px;
+        }
+        .add-block-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .add-block-btn:hover { border-color: var(--accent-border); color: var(--accent); background: var(--accent-dim); }
+
+        /* ─ SECTION DIVIDER ─ */
+        .section-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 28px 0 20px;
+        }
+        .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .section-divider-label {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+        }
+
+        /* ─ PREVIEW PANEL ─ */
+        .preview-panel {
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .preview-topbar {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .preview-topbar-label {
+            font-size: 9px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.18em;
+            color: var(--text-dim);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .preview-topbar-label::before {
+            content: ''; width: 6px; height: 6px;
+            border-radius: 50%; background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .preview-phone {
+            margin: 20px auto;
+            width: 240px;
+            background: var(--bg);
+            border-radius: 28px;
+            border: 1px solid var(--border-hover);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        .preview-phone-notch {
+            height: 28px;
+            background: var(--surface);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .preview-phone-notch-bar {
+            width: 60px; height: 4px;
+            background: var(--surface-3); border-radius: 2px;
+        }
+        .preview-phone-screen {
+            padding: 16px;
+            min-height: 400px;
+        }
+        .preview-card-mock {
+            background: var(--surface);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .preview-card-media {
+            height: 100px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+        }
+        .preview-card-body { padding: 12px; }
+        .preview-card-tag {
+            font-size: 7px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            padding: 2px 8px; border-radius: 100px;
+            border: 1px solid; display: inline-block; margin-bottom: 6px;
+        }
+        .preview-card-title {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.2;
+            color: var(--text);
+        }
+        .preview-card-meta {
+            font-size: 8px; font-weight: 600;
+            color: var(--text-dim);
+            margin-top: 4px;
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+
+        /* Code output */
+        .code-panel {
+            margin: 0 20px 20px;
+            background: #0A0A0C;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .code-panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .code-panel-label {
+            font-size: 9px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.15em;
+            color: var(--text-dim);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .code-panel-label span {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #FFD166; display: inline-block;
+        }
+        .copy-btn-new {
+            font-size: 9px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            background: var(--surface-3); color: var(--text-muted);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+        }
+        .copy-btn-new:hover { color: var(--accent); border-color: var(--accent-border); }
+        .copy-btn-new.copied { color: var(--accent); border-color: var(--accent-border); background: var(--accent-dim); }
+
+        pre#js-output {
+            padding: 16px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.7;
+            color: #9cdcfe;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        /* ─ TOAST ─ */
+        .toast {
+            position: fixed;
+            bottom: 24px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--surface);
+            border: 1px solid var(--accent-border);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 100px;
+            z-index: 9998;
+            transition: transform 0.4s var(--smooth);
+            white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ─ ANIMATIONS ─ */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(20px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.5s var(--smooth) both; }
+        .delay-1 { animation-delay: 0.05s; }
+        .delay-2 { animation-delay: 0.1s; }
+        .delay-3 { animation-delay: 0.18s; }
+
+        /* ─ MISC ─ */
+        input[type=color] {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            cursor: pointer; padding: 2px;
         }
     </style>
 </head>
+<body>
 
-<body class="p-4 md:p-12">
+<div class="studio-layout">
 
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
+    <!-- ── TOPBAR ── -->
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <a href="index.html" class="btn-topbar" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                App
+            </a>
+            <div class="topbar-logo">OnJesus<span>.</span></div>
+            <span class="topbar-badge">Studio</span>
+        </div>
+        <div class="topbar-right">
+            <span id="autosave-status" style="font-size:10px;color:var(--text-dim);font-weight:600;">—</span>
+            <button class="btn-topbar" onclick="Studio.resetForm()">Limpar</button>
+            <button class="btn-topbar primary" onclick="Studio.generateAndCopy()">
+                ✦ Gerar & Copiar
+            </button>
+        </div>
+    </header>
 
-        <aside class="lg:col-span-1">
-            <div class="sidebar space-y-6">
-                <div class="mb-10">
-                    <h1 class="text-2xl font-800 tracking-tighter">OnJesus <span class="text-gray-300 font-400">DS</span>
-                    </h1>
-                    <p class="text-xs text-gray-400 mt-1 font-600 uppercase tracking-widest">Design System v1.0</p>
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <p class="sidebar-section-label">Navegação</p>
+        <a href="#meta" class="sidebar-link active" onclick="scrollTo('meta',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Metadados
+        </a>
+        <a href="#blocks" class="sidebar-link" onclick="scrollTo('blocks',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Blocos
+        </a>
+        <a href="#output" class="sidebar-link" onclick="scrollTo('output',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Output JS
+        </a>
+
+        <p class="sidebar-section-label" style="margin-top:8px;">Estudos Recentes</p>
+        <div id="recent-studies"></div>
+
+        <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border);">
+            <p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--text-dim);padding:8px 10px;">Categorias</p>
+            <div style="padding:0 8px;display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#B8F55A;flex-shrink:0;"></div>
+                    <span style="font-size:11px;font-weight:600;color:var(--text-muted);">História</span>
                 </div>
-                <nav class="flex flex-col gap-2 text-sm font-600 text-gray-500">
-                    <a href="#componentes" class="hover:text-black">Componentes</a>
-                    <a href="#categorias" class="hover:text-black">Categorias & Cores</a>
-                    <a href="#editor" class="text-[#4A6741] font-800">Study Builder (JS Object)</a>
-                </nav>
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#6B9FFF;flex-shrink:0;"></div>
+                    <span style="font-size:11px;font-weight:600;color:var(--text-muted);">Profecia</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#FFD166;flex-shrink:0;"></div>
+                    <span style="font-size:11px;font-weight:600;color:var(--text-muted);">Sabedoria</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#FF6B6B;flex-shrink:0;"></div>
+                    <span style="font-size:11px;font-weight:600;color:var(--text-muted);">Evangelho</span>
+                </div>
             </div>
-        </aside>
+        </div>
+    </aside>
 
-        <main class="lg:col-span-3 space-y-20">
+    <!-- ── EDITOR ── -->
+    <main class="editor-panel" id="editor-scroll">
 
-            <section id="componentes">
-                <h2 class="text-3xl font-800 mb-6 tracking-tight">Componentes Core</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-6 bg-white border rounded-[32px] shadow-sm">
-                        <h4 class="font-800 text-xs mb-4 text-gray-400 uppercase tracking-widest">Swipe Card</h4>
-                        <div class="w-48 h-64 bg-gray-50 border rounded-[32px] mx-auto flex flex-col p-4 shadow-sm">
-                            <div
-                                class="h-32 bg-white rounded-[24px] mb-4 flex items-center justify-center text-4xl shadow-sm">
-                                🌿</div>
-                            <div class="h-2 w-1/2 bg-gray-200 rounded-full mb-2"></div>
-                            <div class="h-4 w-3/4 bg-gray-800 rounded-full"></div>
-                        </div>
-                    </div>
-                    <div class="p-6 bg-white border rounded-[32px] shadow-sm">
-                        <h4 class="font-800 text-xs mb-4 text-gray-400 uppercase tracking-widest">Typography</h4>
-                        <p class="text-4xl font-800 tracking-tighter mb-2">Plus Jakarta</p>
-                        <p class="text-gray-500 text-sm leading-relaxed">Usamos pesos 400 (corpo), 600 (semi-bold) e 800
-                            (títulos) para criar contraste máximo.</p>
-                    </div>
+        <!-- Metadata -->
+        <section id="meta">
+            <div class="section-divider fade-up">
+                <div class="section-divider-line"></div>
+                <span class="section-divider-label">01 — Metadados</span>
+                <div class="section-divider-line"></div>
+            </div>
+
+            <div class="meta-grid fade-up delay-1">
+                <div class="field-group" style="grid-column:1/-1;">
+                    <label class="field-label">Título do Estudo</label>
+                    <input type="text" id="ed-title" class="field-input"
+                           placeholder="ex: A Aliança"
+                           oninput="Studio.onTitleInput(this.value)">
                 </div>
-            </section>
-
-            <section id="categorias">
-                <h2 class="text-3xl font-800 mb-6 tracking-tight">System Colors</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="text-xs font-800 text-gray-400 uppercase border-b">
-                                <th class="pb-4">Categoria</th>
-                                <th class="pb-4">Primária</th>
-                                <th class="pb-4">Fundo (BG)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm font-600">
-                            <tr>
-                                <td class="py-4">História</td>
-                                <td class="py-4 text-[#4A6741]">#4A6741</td>
-                                <td class="py-4"><span class="px-3 py-1 bg-[#F1F3F0] rounded-full">#F1F3F0</span></td>
-                            </tr>
-                            <tr>
-                                <td class="py-4">Profecia</td>
-                                <td class="py-4 text-[#6A5ACD]">#6A5ACD</td>
-                                <td class="py-4"><span class="px-3 py-1 bg-[#F0F0FA] rounded-full">#F0F0FA</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <hr>
-
-            <section id="editor">
-                <div class="bg-white p-6 md:p-10 rounded-[40px] border shadow-2xl">
-                    <div class="mb-8">
-                        <h2 class="text-4xl font-800 tracking-tighter">Study Builder</h2>
-                        <p class="text-gray-400 mt-2">Crie a estrutura do objeto JS para o `studies` em segundos.</p>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">ID Único (key)</label>
-                                <input type="text" id="ed-id" placeholder="ex: pentateuco"
-                                    class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none focus:ring-2 ring-[#4A6741]/20">
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">Título</label>
-                                <input type="text" id="ed-title" placeholder="Nome do estudo"
-                                    class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input type="text" id="ed-author" placeholder="Autor (ex: João Silva)"
-                                class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
-                            <input type="text" id="ed-date" placeholder="Data (ex: 12 Out 2023)"
-                                class="w-full p-4 bg-gray-50 border rounded-2xl outline-none">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-800 uppercase ml-2 text-gray-400">Categoria</label>
-                            <select id="ed-cat" class="w-full p-4 mt-1 bg-gray-50 border rounded-2xl outline-none">
-                                <option value="historia">História</option>
-                                <option value="profecia">Profecia</option>
-                                <option value="sabedoria">Sabedoria</option>
-                            </select>
-                        </div>
-
-                        <div id="steps-container" class="space-y-4 pt-6">
-                        </div>
-
-                        <button onclick="addStep()"
-                            class="w-full py-4 border-2 border-dashed border-gray-200 rounded-3xl text-gray-400 font-800 hover:border-[#4A6741] hover:text-[#4A6741] transition">+
-                            NOVO BLOCO DE CONTEÚDO</button>
-
-                        <div class="pt-6">
-                            <button onclick="generateJSObject()"
-                                class="w-full bg-black text-white py-5 rounded-3xl font-800 shadow-xl hover:scale-[1.02] active:scale-95 transition">GERAR
-                                OBJETO JAVASCRIPT</button>
-                        </div>
-
-                        <div class="mt-8">
-                            <h3 class="text-xs font-800 mb-3 text-gray-400 uppercase tracking-widest ml-2">Objeto Pronto
-                                para Copiar:</h3>
-                            <div class="code-output">
-                                <div class="copy-btn" onclick="copyCode()">COPIAR</div>
-                                <pre id="js-output">// O objeto aparecerá aqui...</pre>
-                            </div>
-                        </div>
+                <div class="field-group" style="grid-column:1/-1;">
+                    <label class="field-label" style="display:flex;align-items:center;justify-content:space-between;">
+                        <span>ID único <span style="color:var(--text-dim);font-weight:600;text-transform:none;letter-spacing:0;">— gerado automaticamente</span></span>
+                        <button id="id-override-btn" onclick="Studio.toggleIdOverride()"
+                            style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;
+                                   color:var(--text-dim);background:none;border:none;cursor:pointer;transition:color .15s;"
+                            onmouseover="this.style.color='var(--accent)'"
+                            onmouseout="this.style.color='var(--text-dim)'">✎ Editar</button>
+                    </label>
+                    <div style="position:relative;">
+                        <input type="text" id="ed-id" class="field-input"
+                               placeholder="gerado a partir do título…"
+                               readonly
+                               style="color:var(--text-muted);cursor:default;padding-right:72px;"
+                               oninput="Studio.livePreview()">
+                        <span id="id-auto-badge"
+                              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                                     font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;
+                                     color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);
+                                     padding:2px 8px;border-radius:100px;pointer-events:none;">Auto</span>
                     </div>
                 </div>
-            </section>
-        </main>
-    </div>
+                <div class="field-group">
+                    <label class="field-label">Autor</label>
+                    <input type="text" id="ed-author" class="field-input" placeholder="ex: Leonardo Garcia"
+                           oninput="Studio.livePreview()">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Data de publicação</label>
+                    <input type="text" id="ed-date" class="field-input" placeholder="ex: 03 Mar 2026"
+                           oninput="Studio.livePreview()">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">URL da imagem capa (opcional)</label>
+                    <input type="text" id="ed-image" class="field-input" placeholder="/res/nome.png"
+                           oninput="Studio.livePreview()">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Ícone (emoji, fallback)</label>
+                    <input type="text" id="ed-icon" class="field-input" placeholder="🌿"
+                           oninput="Studio.livePreview()">
+                </div>
+            </div>
 
-    <script>
-        function addStep() {
-            const container = document.getElementById('steps-container');
-            const stepNum = container.children.length + 1;
-            const div = document.createElement('div');
-            div.className = "step-entry bg-white p-6 rounded-3xl border shadow-sm space-y-3";
-            div.innerHTML = `
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] font-800 bg-black text-white px-3 py-1 rounded-full uppercase">Bloco ${stepNum}</span>
+            <div class="field-group fade-up delay-2">
+                <label class="field-label">Categoria</label>
+                <div class="cat-selector" id="cat-selector">
+                    <div class="cat-option selected" data-cat="historia" style="--option-color:#B8F55A" onclick="Studio.selectCat(this)">
+                        <div class="cat-option-dot" style="background:#B8F55A"></div>
+                        <div class="cat-option-label">História</div>
+                    </div>
+                    <div class="cat-option" data-cat="profecia" style="--option-color:#6B9FFF" onclick="Studio.selectCat(this)">
+                        <div class="cat-option-dot" style="background:#6B9FFF"></div>
+                        <div class="cat-option-label">Profecia</div>
+                    </div>
+                    <div class="cat-option" data-cat="sabedoria" style="--option-color:#FFD166" onclick="Studio.selectCat(this)">
+                        <div class="cat-option-dot" style="background:#FFD166"></div>
+                        <div class="cat-option-label">Sabedoria</div>
+                    </div>
+                    <div class="cat-option" data-cat="evangelho" style="--option-color:#FF6B6B" onclick="Studio.selectCat(this)">
+                        <div class="cat-option-dot" style="background:#FF6B6B"></div>
+                        <div class="cat-option-label">Evangelho</div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" placeholder="Ícone (🌳)" class="ed-step-icon p-3 border rounded-xl text-sm">
-                    <input type="text" placeholder="Cabeçalho" class="ed-step-head p-3 border rounded-xl text-sm col-span-2">
+            </div>
+        </section>
+
+        <!-- Blocks -->
+        <section id="blocks">
+            <div class="section-divider fade-up delay-2">
+                <div class="section-divider-line"></div>
+                <span class="section-divider-label">02 — Blocos de Conteúdo</span>
+                <div class="section-divider-line"></div>
+            </div>
+
+            <div class="blocks-list fade-up delay-3" id="blocks-list"></div>
+
+            <div class="add-block-row fade-up delay-3">
+                <button class="add-block-btn" onclick="Studio.addBlock('intro')">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Bloco de Texto
+                </button>
+                <button class="add-block-btn" onclick="Studio.addBlock('quote')" style="flex:0.6">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+                    Citação
+                </button>
+            </div>
+        </section>
+
+        <!-- Output -->
+        <section id="output" style="margin-top:8px;">
+            <div class="section-divider fade-up">
+                <div class="section-divider-line"></div>
+                <span class="section-divider-label">03 — Output JavaScript</span>
+                <div class="section-divider-line"></div>
+            </div>
+            <div class="code-panel fade-up">
+                <div class="code-panel-header">
+                    <span class="code-panel-label"><span></span>studies object</span>
+                    <button class="copy-btn-new" id="copy-btn" onclick="Studio.copyCode()">Copiar</button>
                 </div>
-                <textarea placeholder="Conteúdo (Um parágrafo por linha)" class="ed-step-content w-full p-3 border rounded-xl h-24 text-sm"></textarea>
-            `;
-            container.appendChild(div);
+                <pre id="js-output">// Preencha os campos e clique em "Gerar & Copiar"…</pre>
+            </div>
+        </section>
+
+        <div style="height:60px;"></div>
+    </main>
+
+    <!-- ── PREVIEW PANEL ── -->
+    <aside class="preview-panel">
+        <div class="preview-topbar">
+            <span class="preview-topbar-label">Preview ao vivo</span>
+            <span style="font-size:9px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Card</span>
+        </div>
+        <div class="preview-phone" style="margin-top:24px;">
+            <div class="preview-phone-notch"><div class="preview-phone-notch-bar"></div></div>
+            <div class="preview-phone-screen">
+                <div id="preview-card" class="preview-card-mock">
+                    <div class="preview-card-media" id="preview-media" style="background:#141F0E;">🌿</div>
+                    <div class="preview-card-body">
+                        <span class="preview-card-tag" id="preview-tag" style="color:#B8F55A;border-color:rgba(184,245,90,0.3);background:rgba(184,245,90,0.08);">História</span>
+                        <p class="preview-card-title" id="preview-title">Título do Estudo</p>
+                        <p class="preview-card-meta" id="preview-meta">Autor · Data</p>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+                    <div style="height:6px;background:var(--surface-2);border-radius:4px;width:100%;"></div>
+                    <div style="height:6px;background:var(--surface-2);border-radius:4px;width:80%;"></div>
+                    <div style="height:6px;background:var(--surface-2);border-radius:4px;width:90%;"></div>
+                    <div style="height:6px;background:var(--surface-2);border-radius:4px;width:65%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding:0 20px;margin-top:4px;">
+            <p style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:var(--text-dim);margin-bottom:10px;">Estrutura dos blocos</p>
+            <div id="block-outline" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div class="code-panel" style="margin:0 20px 20px;">
+                <div class="code-panel-header">
+                    <span class="code-panel-label"><span></span>output</span>
+                    <button class="copy-btn-new" id="copy-btn-2" onclick="Studio.copyCode(true)">Copiar</button>
+                </div>
+                <pre id="js-output-2" style="font-family:'Fira Code','Courier New',monospace;font-size:9.5px;line-height:1.7;color:#9cdcfe;padding:14px;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto;">// aparecerá aqui…</pre>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+function scrollTo(id, el) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    if (el) el.classList.add('active');
+}
+
+const CAT_CONFIG = {
+    historia:  { name: 'História',  color: '#B8F55A', bg: 'rgba(184,245,90,0.08)',  border: 'rgba(184,245,90,0.3)',  mediaBg: '#141F0E' },
+    profecia:  { name: 'Profecia',  color: '#6B9FFF', bg: 'rgba(107,159,255,0.08)', border: 'rgba(107,159,255,0.3)', mediaBg: '#0F1320' },
+    sabedoria: { name: 'Sabedoria', color: '#FFD166', bg: 'rgba(255,209,102,0.08)', border: 'rgba(255,209,102,0.3)', mediaBg: '#1A1508' },
+    evangelho: { name: 'Evangelho', color: '#FF6B6B', bg: 'rgba(255,107,107,0.08)', border: 'rgba(255,107,107,0.3)', mediaBg: '#1A0D0D' },
+};
+
+const Studio = {
+    blocks: [],
+    selectedCat: 'historia',
+    blockCounter: 0,
+
+    init() {
+        this.addBlock('intro');
+        this.addBlock('quote');
+        this.livePreview();
+        this.loadRecent();
+
+        // Auto-generate on any input change
+        document.getElementById('editor-scroll').addEventListener('input', () => {
+            clearTimeout(this._autoTimer);
+            this._autoTimer = setTimeout(() => {
+                this.generate();
+                this.livePreview();
+                this.saveAutoDraft();
+            }, 400);
+        });
+    },
+
+    selectCat(el) {
+        document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        this.selectedCat = el.dataset.cat;
+        this.livePreview();
+        this.generate();
+    },
+
+    addBlock(type = 'intro') {
+        const id = ++this.blockCounter;
+        this.blocks.push({ id, type });
+        this.renderBlock(id, type);
+        this.livePreview();
+    },
+
+    renderBlock(id, type) {
+        const list = document.getElementById('blocks-list');
+        const div = document.createElement('div');
+        div.className = 'block-card fade-up';
+        div.id = `block-${id}`;
+        div.innerHTML = this.blockHTML(id, type);
+        list.appendChild(div);
+        // init type toggle
+        this.updateBlockBodyVisibility(id, type);
+    },
+
+    blockHTML(id, type) {
+        return `
+        <div class="block-header" onclick="Studio.toggleBlock(${id})">
+            <span class="block-num">#${id}</span>
+            <span class="block-type-badge block-type-${type}" id="badge-${id}">${type === 'intro' ? 'Texto' : 'Citação'}</span>
+            <span class="block-title-preview" id="preview-head-${id}">Novo bloco…</span>
+            <div class="block-actions" onclick="event.stopPropagation()">
+                <button class="block-action-btn move" title="Mover para cima" onclick="Studio.moveBlock(${id},-1)">↑</button>
+                <button class="block-action-btn move" title="Mover para baixo" onclick="Studio.moveBlock(${id},1)">↓</button>
+                <button class="block-action-btn danger" title="Remover" onclick="Studio.removeBlock(${id})">✕</button>
+            </div>
+        </div>
+        <div class="block-body" id="body-${id}">
+            <div class="type-toggle">
+                <button class="type-btn ${type==='intro'?'active-intro':''}" id="btn-intro-${id}" onclick="Studio.switchType(${id},'intro')">✦ Texto</button>
+                <button class="type-btn ${type==='quote'?'active-quote':''}" id="btn-quote-${id}" onclick="Studio.switchType(${id},'quote')">❝ Citação</button>
+            </div>
+
+            <div class="intro-fields" id="intro-${id}" style="${type!=='intro'?'display:none':''}">
+                <div class="field-group" style="margin-bottom:10px;">
+                    <label class="field-label">Título da seção</label>
+                    <input type="text" class="field-input step-head" placeholder="ex: A falsa sensação"
+                           oninput="document.getElementById('preview-head-${id}').textContent=this.value||'Novo bloco…'">
+                </div>
+                <div class="field-group" style="margin-bottom:10px;">
+                    <label class="field-label">URL da imagem (opcional)</label>
+                    <input type="text" class="field-input step-image" placeholder="/res/img.png">
+                </div>
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label">Parágrafos (um por linha)</label>
+                    <textarea class="field-input step-content" rows="5"
+                              placeholder="Primeiro parágrafo…&#10;Segundo parágrafo…&#10;Terceiro parágrafo…"></textarea>
+                </div>
+            </div>
+
+            <div class="quote-fields" id="quote-${id}" style="${type!=='quote'?'display:none':''}">
+                <div class="field-group" style="margin-bottom:10px;">
+                    <label class="field-label">Texto da citação / versículo</label>
+                    <textarea class="field-input step-quote-text" rows="4"
+                              placeholder="Porque Deus amou o mundo de tal maneira…"></textarea>
+                </div>
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label">Referência (livro, capítulo e versículo)</label>
+                    <input type="text" class="field-input step-quote-ref" placeholder="ex: João 3:16 NVI"
+                           oninput="document.getElementById('preview-head-${id}').textContent=this.value||'Citação…'">
+                </div>
+            </div>
+        </div>`;
+    },
+
+    switchType(id, type) {
+        const block = this.blocks.find(b => b.id === id);
+        if (block) block.type = type;
+        document.getElementById(`btn-intro-${id}`).className = `type-btn ${type==='intro'?'active-intro':''}`;
+        document.getElementById(`btn-quote-${id}`).className = `type-btn ${type==='quote'?'active-quote':''}`;
+        const badge = document.getElementById(`badge-${id}`);
+        badge.textContent = type === 'intro' ? 'Texto' : 'Citação';
+        badge.className = `block-type-badge block-type-${type}`;
+        this.updateBlockBodyVisibility(id, type);
+        this.generate();
+    },
+
+    slugify(text) {
+        return text
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
+            .replace(/[^a-z0-9\s_]/g, '')
+            .trim()
+            .replace(/\s+/g, '_')
+            .slice(0, 40);
+    },
+
+    _idManual: false,
+
+    onTitleInput(val) {
+        if (!this._idManual) {
+            const slug = this.slugify(val);
+            const idField = document.getElementById('ed-id');
+            if (idField) idField.value = slug;
         }
+        this.livePreview();
+        clearTimeout(this._autoTimer);
+        this._autoTimer = setTimeout(() => { this.generate(); this.saveAutoDraft(); }, 400);
+    },
 
-        function generateJSObject() {
-            const id = document.getElementById('ed-id').value || "novo_estudo";
+    toggleIdOverride() {
+        const idField = document.getElementById('ed-id');
+        const badge = document.getElementById('id-auto-badge');
+        const btn = document.getElementById('id-override-btn');
+        this._idManual = !this._idManual;
+        if (this._idManual) {
+            idField.removeAttribute('readonly');
+            idField.style.cursor = 'text';
+            idField.style.color = 'var(--text)';
+            idField.focus();
+            badge.textContent = 'Manual';
+            badge.style.color = '#FFD166';
+            badge.style.background = 'rgba(255,209,102,0.1)';
+            badge.style.borderColor = 'rgba(255,209,102,0.3)';
+            btn.textContent = '↺ Auto';
+        } else {
+            idField.setAttribute('readonly', true);
+            idField.style.cursor = 'default';
+            idField.style.color = 'var(--text-muted)';
+            // Re-sync with title
             const title = document.getElementById('ed-title').value;
-            const category = document.getElementById('ed-cat').value;
-            const author = document.getElementById('ed-author').value || "Equipe OnJesus";
-            const date = document.getElementById('ed-date').value || "Hoje";
-            let stepsJS = "";
-            document.querySelectorAll('.step-entry').forEach((el, idx) => {
-                const icon = el.querySelector('.ed-step-icon').value;
-                const head = el.querySelector('.ed-step-head').value;
-                const content = el.querySelector('.ed-step-content').value.split('\n').filter(p => p.trim() !== "");
-              
-                const contentFormatted = content.map(p => `\n                "${p}"`).join(',');
+            idField.value = this.slugify(title);
+            badge.textContent = 'Auto';
+            badge.style.color = 'var(--accent)';
+            badge.style.background = 'var(--accent-dim)';
+            badge.style.borderColor = 'var(--accent-border)';
+            btn.textContent = '✎ Editar';
+        }
+    },
 
-                stepsJS += `        {
-                    type: "intro",
-                    icon: "${icon}",
-                    head: "${head}",
-                    content: [${contentFormatted}
-                    ]
-                }${idx < document.querySelectorAll('.step-entry').length - 1 ? ',' : ''}\n`;
-            });
+    updateBlockBodyVisibility(id, type) {
+        const introEl = document.getElementById(`intro-${id}`);
+        const quoteEl = document.getElementById(`quote-${id}`);
+        if (introEl) introEl.style.display = type === 'intro' ? '' : 'none';
+        if (quoteEl) quoteEl.style.display = type === 'quote' ? '' : 'none';
+    },
 
-            const result = `${id}: {
-                title: "${title}",
-                category: "${category}",
-                author: "${author}",
-                date: "${date}",
-                image: "",
-                icon: "${document.querySelector('.ed-step-icon')?.value || '📖'}",
-                steps: [\n${stepsJS}    ]
-            },`;
+    toggleBlock(id) {
+        const body = document.getElementById(`body-${id}`);
+        if (body) body.classList.toggle('collapsed');
+    },
 
-            document.getElementById('js-output').innerText = result;
+    removeBlock(id) {
+        document.getElementById(`block-${id}`)?.remove();
+        this.blocks = this.blocks.filter(b => b.id !== id);
+        this.livePreview();
+        this.generate();
+    },
+
+    moveBlock(id, dir) {
+        const list = document.getElementById('blocks-list');
+        const el = document.getElementById(`block-${id}`);
+        if (!el) return;
+        if (dir === -1 && el.previousElementSibling) {
+            list.insertBefore(el, el.previousElementSibling);
+        } else if (dir === 1 && el.nextElementSibling) {
+            list.insertBefore(el.nextElementSibling, el);
+        }
+        this.generate();
+    },
+
+    livePreview() {
+        const cat = CAT_CONFIG[this.selectedCat];
+        const title = document.getElementById('ed-title').value || 'Título do Estudo';
+        const author = document.getElementById('ed-author').value || 'Autor';
+        const date = document.getElementById('ed-date').value || 'Data';
+        const icon = document.getElementById('ed-icon').value || '🌿';
+        const image = document.getElementById('ed-image').value;
+
+        document.getElementById('preview-title').textContent = title;
+        document.getElementById('preview-meta').textContent = `${author} · ${date}`;
+
+        const tag = document.getElementById('preview-tag');
+        tag.textContent = cat.name;
+        tag.style.color = cat.color;
+        tag.style.borderColor = cat.border;
+        tag.style.background = cat.bg;
+
+        const media = document.getElementById('preview-media');
+        media.style.background = cat.mediaBg;
+        if (image) {
+            media.innerHTML = `<img src="${image}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${icon}'">`;
+        } else {
+            media.textContent = icon;
         }
 
-        function copyCode() {
-            const code = document.getElementById('js-output').innerText;
-            navigator.clipboard.writeText(code);
-            alert("Objeto copiado!");
-        }
+        // Block outline
+        const outline = document.getElementById('block-outline');
+        const cards = document.querySelectorAll('.block-card');
+        outline.innerHTML = '';
+        cards.forEach((card, i) => {
+            const badge = card.querySelector('.block-type-badge');
+            const preview = card.querySelector('.block-title-preview');
+            const isIntro = badge?.textContent?.trim() === 'Texto';
+            const dot = document.createElement('div');
+            dot.style.cssText = `display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:8px;background:var(--surface);border:1px solid var(--border);`;
+            dot.innerHTML = `
+                <div style="width:6px;height:6px;border-radius:50%;background:${isIntro?'var(--accent)':'#FFD166'};flex-shrink:0;"></div>
+                <span style="font-size:10px;font-weight:600;color:var(--text-muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1;">${preview?.textContent || `Bloco ${i+1}`}</span>
+                <span style="font-size:8px;font-weight:700;color:var(--text-dim);text-transform:uppercase;">${isIntro?'txt':'cit'}</span>
+            `;
+            outline.appendChild(dot);
+        });
+    },
 
-        // Inicializa com um passo
-        addStep();
-    </script>
+    buildStepsArray() {
+        const steps = [];
+        document.querySelectorAll('.block-card').forEach(card => {
+            const badge = card.querySelector('.block-type-badge');
+            const isIntro = badge?.textContent?.trim() === 'Texto';
+            if (isIntro) {
+                const head = card.querySelector('.step-head')?.value?.trim() || '';
+                const image = card.querySelector('.step-image')?.value?.trim() || '';
+                const raw = card.querySelector('.step-content')?.value || '';
+                const content = raw.split('\n').map(p => p.trim()).filter(Boolean);
+                steps.push({ type: 'intro', head, image, content });
+            } else {
+                const text = card.querySelector('.step-quote-text')?.value?.trim() || '';
+                const author = card.querySelector('.step-quote-ref')?.value?.trim() || '';
+                steps.push({ type: 'quote', text, author });
+            }
+        });
+        return steps;
+    },
+
+    generate() {
+        const id = document.getElementById('ed-id').value?.trim() || 'novo_estudo';
+        const title = document.getElementById('ed-title').value?.trim() || '';
+        const author = document.getElementById('ed-author').value?.trim() || 'Equipe OnJesus';
+        const date = document.getElementById('ed-date').value?.trim() || 'Hoje';
+        const image = document.getElementById('ed-image').value?.trim() || '';
+        const icon = document.getElementById('ed-icon').value?.trim() || '📖';
+        const cat = this.selectedCat;
+
+        const steps = this.buildStepsArray();
+        const stepsStr = steps.map((s, idx) => {
+            const comma = idx < steps.length - 1 ? ',' : '';
+            if (s.type === 'intro') {
+                const contentStr = s.content.map(p => `\n                    "${p.replace(/"/g,'\\\"')}"`).join(',');
+                return `        {\n            type: "intro",\n            image: "${s.image}",\n            head: "${s.head.replace(/"/g,'\\\"')}",\n            content: [${contentStr}\n            ]\n        }${comma}`;
+            } else {
+                return `        {\n            type: "quote",\n            author: "${s.author.replace(/"/g,'\\\"')}",\n            text: "${s.text.replace(/"/g,'\\\"')}"\n        }${comma}`;
+            }
+        }).join('\n');
+
+        const result = `${id}: {\n    title: "${title.replace(/"/g,'\\\"')}",\n    category: "${cat}",\n    author: "${author.replace(/"/g,'\\\"')}",\n    date: "${date}",\n    image: "${image}",\n    icon: "${icon}",\n    steps: [\n${stepsStr}\n    ],\n},`;
+
+        document.getElementById('js-output').textContent = result;
+        document.getElementById('js-output-2').textContent = result;
+
+        document.getElementById('autosave-status').textContent = 'Gerado ✓';
+        setTimeout(() => { document.getElementById('autosave-status').textContent = '—'; }, 2000);
+        return result;
+    },
+
+    generateAndCopy() {
+        const code = this.generate();
+        this.livePreview();
+        navigator.clipboard.writeText(code).then(() => {
+            this.showToast('✦ Objeto copiado para a área de transferência!');
+            const btn = document.getElementById('copy-btn');
+            const btn2 = document.getElementById('copy-btn-2');
+            [btn, btn2].forEach(b => { if(b){ b.textContent='Copiado ✓'; b.classList.add('copied'); }});
+            setTimeout(() => { [btn, btn2].forEach(b => { if(b){ b.textContent='Copiar'; b.classList.remove('copied'); }}); }, 3000);
+        });
+    },
+
+    copyCode(fromPanel2 = false) {
+        const code = document.getElementById('js-output').textContent;
+        if (code.startsWith('//')) { this.showToast('Gere o objeto primeiro.'); return; }
+        navigator.clipboard.writeText(code).then(() => {
+            this.showToast('Copiado!');
+            const btn = document.getElementById(fromPanel2 ? 'copy-btn-2' : 'copy-btn');
+            if (btn) { btn.textContent='Copiado ✓'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('copied');}, 2500); }
+        });
+    },
+
+    resetForm() {
+        if (!confirm('Limpar tudo?')) return;
+        ['ed-title','ed-author','ed-date','ed-image','ed-icon'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+        const idField = document.getElementById('ed-id');
+        if (idField) { idField.value = ''; }
+        // Reset to auto mode
+        this._idManual = false;
+        const badge = document.getElementById('id-auto-badge');
+        const btn = document.getElementById('id-override-btn');
+        if (idField) { idField.setAttribute('readonly',true); idField.style.cursor='default'; idField.style.color='var(--text-muted)'; }
+        if (badge) { badge.textContent='Auto'; badge.style.color='var(--accent)'; badge.style.background='var(--accent-dim)'; badge.style.borderColor='var(--accent-border)'; }
+        if (btn) btn.textContent='✎ Editar';
+        document.getElementById('blocks-list').innerHTML = '';
+        this.blocks = [];
+        this.blockCounter = 0;
+        this.addBlock('intro');
+        document.getElementById('js-output').textContent = '// Preencha os campos e clique em "Gerar & Copiar"…';
+        document.getElementById('js-output-2').textContent = '// aparecerá aqui…';
+        this.livePreview();
+        this.showToast('Formulário limpo.');
+    },
+
+    saveAutoDraft() {
+        try {
+            const data = {
+                id: document.getElementById('ed-id').value,
+                title: document.getElementById('ed-title').value,
+                author: document.getElementById('ed-author').value,
+                date: document.getElementById('ed-date').value,
+                cat: this.selectedCat,
+                savedAt: Date.now(),
+            };
+            localStorage.setItem('studio_draft', JSON.stringify(data));
+            this.loadRecent();
+        } catch(e){}
+    },
+
+    loadRecent() {
+        try {
+            const raw = localStorage.getItem('studio_draft');
+            if (!raw) return;
+            const d = JSON.parse(raw);
+            const container = document.getElementById('recent-studies');
+            const cat = CAT_CONFIG[d.cat] || CAT_CONFIG.historia;
+            container.innerHTML = `
+                <div class="study-item" onclick="Studio.loadDraft()">
+                    <div class="study-item-dot" style="background:${cat.color}"></div>
+                    <span style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${d.title||'Sem título'}</span>
+                </div>`;
+        } catch(e){}
+    },
+
+    loadDraft() {
+        try {
+            const d = JSON.parse(localStorage.getItem('studio_draft'));
+            if (!d) return;
+            document.getElementById('ed-id').value = d.id||'';
+            document.getElementById('ed-title').value = d.title||'';
+            document.getElementById('ed-author').value = d.author||'';
+            document.getElementById('ed-date').value = d.date||'';
+            const catEl = document.querySelector(`[data-cat="${d.cat}"]`);
+            if (catEl) this.selectCat(catEl);
+            this.livePreview();
+            this.showToast('Rascunho carregado.');
+        } catch(e){}
+    },
+
+    showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    },
+};
+
+Studio.init();
+</script>
 </body>
-
 </html>
