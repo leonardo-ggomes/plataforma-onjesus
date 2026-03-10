@@ -10,6 +10,93 @@ const App = {
     },
 
     studies: {
+        quando_deus_parece_em_silencio: {
+            title: "Quando Deus parece em silêncio",
+            category: "sabedoria",
+            author: "Asheley Cristiny",
+            date: "10 Mar 2026",
+            image: "res/img_5.png",
+            icon: "📖",
+            steps: [
+                {
+                    type: "intro",
+                    image: "",
+                    head: "O silêncio que inquieta",
+                    content: [
+                            "Em algum momento da vida, todos nós passamos por algo parecido: oramos, buscamos a Deus, pedimos direção… e parece que nada acontece.",
+                            "As palavras sobem em oração, mas a resposta não vem no tempo que esperamos. As situações continuam difíceis, as dúvidas permanecem, e o coração começa a se perguntar, ainda que em silêncio: \"Será que Deus está me ouvindo?\"",
+                            "Esse tipo de momento mexe com a gente. Porque aprendemos que Deus responde orações, que Ele cuida de nós e que está presente em todos os momentos. Então, quando parece que o céu está em silêncio, o coração fica inquieto.",
+                            "Mas existe uma verdade importante que precisamos lembrar: o silêncio de Deus não significa que Ele está ausente."
+                    ]
+                },
+                {
+                    type: "intro",
+                    image: "",
+                    head: "Deus também trabalha nos processos silenciosos",
+                    content: [
+                            "Muitas vezes estamos acostumados a perceber Deus apenas quando algo extraordinário acontece — uma resposta rápida, uma mudança repentina, uma solução clara. Só que Deus também trabalha nos processos silenciosos, nos intervalos entre uma oração e outra, nos momentos em que aparentemente nada está acontecendo.",
+                            "É como uma semente plantada na terra. Por um tempo não vemos nada, parece que não mudou coisa alguma. Mas por baixo da terra a vida já começou. A raiz está crescendo, se fortalecendo, se preparando para aparecer.",
+                            "Assim também acontece com a nossa fé. Muitas vezes, enquanto achamos que nada está acontecendo, Deus está trabalhando dentro de nós.",
+                            "Às vezes, o silêncio é justamente o lugar onde a fé amadurece."
+                    ]
+                },
+                {
+                    type: "intro",
+                    image: "",
+                    head: "Pessoas muito próximas de Deus viveram momentos de silêncio",
+                    content: [
+                            "O Deus que continua presente",
+                            "Bíblia mostra que até pessoas muito próximas de Deus viveram momentos em que sentiram esse silêncio.",
+                            "O salmista, por exemplo, em um momento de angústia, fez uma pergunta muito sincera a Deus:"
+                    ]
+                },
+                {
+                    type: "quote",
+                    author: "Salmos 13:1",
+                    text: "\"Até quando, Senhor? Para sempre te esquecerás de mim? Até quando esconderás de mim o teu rosto?\""
+                },
+                {
+                    type: "intro",
+                    image: "",
+                    head: "Quando escolhemos confiar mesmo sem entender",
+                    content: [
+                            "Essas palavras mostram algo muito humano. Até quem ama a Deus pode sentir, em algum momento, que Ele está distante ou que não está respondendo.",
+                            "Mas a mesma Bíblia que registra essas perguntas também mostra uma verdade constante: Deus nunca abandona aqueles que são seus.",
+                            "- Mesmo quando não percebemos, Ele continua cuidando.",
+                            "- Mesmo quando não entendemos, Ele continua guiando.",
+                            "- Mesmo quando parece silêncio, Ele continua trabalhando.",
+                            "Às vezes o silêncio de Deus não é indiferença — é preparação.",
+                            "Outras vezes é direção que ainda não conseguimos enxergar.",
+                            "E em muitos momentos é um convite para confiar mais profundamente.",
+                            "A fé verdadeira não nasce apenas quando tudo faz sentido. Muitas vezes ela cresce quando escolhemos confiar mesmo sem entender completamente o que Deus está fazendo.."
+                    ]
+                },
+                {
+                    type: "intro",
+                    image: "",
+                    head: "No silêncio que aprendemos a reconhecer a presença",
+                    content: [
+                            "Aprendendo a confiar no silêncio",
+                            "Talvez hoje você esteja vivendo exatamente isso. Você ora, busca respostas, pede direção… mas tudo parece quieto.",
+                            "Se esse é o seu momento, lembre-se de algo muito importante: Deus não se torna menos presente apenas porque está em silêncio.",
+                            "O silêncio de Deus não é um vazio. Muitas vezes é um espaço onde Ele molda o nosso coração, fortalece a nossa confiança e nos ensina a depender mais dEle do que das circunstâncias.",
+                            "- Algumas respostas chegam rapidamente.",
+                            "- Outras chegam com o tempo.",
+                            "- E algumas vêm de formas diferentes daquilo que imaginávamos.",
+                            "Mas Deus continua fiel em todos esses momentos.",
+                            "- Talvez hoje não seja o dia de entender tudo.",
+                            "- Talvez seja apenas o dia de continuar confiando.",
+                            "Porque mesmo quando o céu parece silencioso, Deus continua ouvindo.",
+                            "E muitas vezes é justamente no silêncio que aprendemos a reconhecer a presença de Deus de forma ainda mais profunda."
+                    ]
+                },
+                {
+                    type: "quote",
+                    author: "Salmos 46:10",
+                    text: "Aquietai-vos e saibam que eu sou Deus"
+                },
+            ],
+        },
          isso_pode_estar_destruindo_tudo_que_deus: {
             title: "Isso pode estar destruindo tudo que Deus construiu em você",
             category: "sabedoria",
