@@ -46,7 +46,7 @@ const App = {
                     head: "Pessoas muito próximas de Deus viveram momentos de silêncio",
                     content: [
                             "O Deus que continua presente",
-                            "Bíblia mostra que até pessoas muito próximas de Deus viveram momentos em que sentiram esse silêncio.",
+                            "A Bíblia mostra que até pessoas muito próximas de Deus viveram momentos em que sentiram esse silêncio.",
                             "O salmista, por exemplo, em um momento de angústia, fez uma pergunta muito sincera a Deus:"
                     ]
                 },
@@ -471,5 +471,6 @@ const App = {
         if (indicator) indicator.style.width = scrolled + '%';
     }
 };
+
 
 App.init();
