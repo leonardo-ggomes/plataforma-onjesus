@@ -74,9 +74,8 @@ const App = {
                 {
                     type: "intro",
                     image: "",
-                    head: "No silêncio que aprendemos a reconhecer a presença",
-                    content: [
-                            "Aprendendo a confiar no silêncio",
+                    head: "Aprendendo a confiar no silêncio",
+                    content: [                    
                             "Talvez hoje você esteja vivendo exatamente isso. Você ora, busca respostas, pede direção… mas tudo parece quieto.",
                             "Se esse é o seu momento, lembre-se de algo muito importante: Deus não se torna menos presente apenas porque está em silêncio.",
                             "O silêncio de Deus não é um vazio. Muitas vezes é um espaço onde Ele molda o nosso coração, fortalece a nossa confiança e nos ensina a depender mais dEle do que das circunstâncias.",
@@ -247,10 +246,184 @@ const App = {
         }
     },
 
+    // ─── SHARING ────────────────────────────────────────────────────────────────
+
+    _currentStudyId: null,
+
+    /**
+     * Build the canonical URL for a study.
+     * Works on localhost and any real domain.
+     */
+    _studyUrl(id) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
+        url.searchParams.set('study', id);
+        return url.toString();
+    },
+
+    /**
+     * Share the whole study article.
+     * Uses the Web Share API when available (mobile), falls back to clipboard.
+     */
+    async shareStudy(id) {
+        const study = this.studies[id];
+        if (!study) return;
+
+        const url   = this._studyUrl(id);
+        const title = study.title;
+        const text  = `"${title}" — OnJesus`;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({ title, text, url });
+                return;
+            } catch (e) {
+                // user cancelled or API unavailable — fall through to clipboard
+                if (e.name === 'AbortError') return;
+            }
+        }
+
+        // Fallback: copy link to clipboard
+        try {
+            await navigator.clipboard.writeText(url);
+            this._toast('Link copiado! 🔗');
+        } catch {
+            this._toast('Copie o link: ' + url);
+        }
+    },
+
+    /**
+     * Share a highlighted text passage.
+     * Called by the selection popover button.
+     */
+    async sharePassage(text, studyId) {
+        const url   = this._studyUrl(studyId || this._currentStudyId);
+        const study = this.studies[studyId || this._currentStudyId];
+        const title = study ? study.title : 'OnJesus';
+        const shareText = `"${text}"\n\n— ${title}\nOnJesus: ${url}`;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({ title, text: shareText });
+                return;
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+            }
+        }
+
+        try {
+            await navigator.clipboard.writeText(shareText);
+            this._toast('Trecho copiado! ✨');
+        } catch {
+            this._toast('Erro ao copiar.');
+        }
+    },
+
+    /**
+     * Show a brief toast notification.
+     */
+    _toast(msg) {
+        let el = document.getElementById('share-toast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'share-toast';
+            document.body.appendChild(el);
+        }
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+    },
+
+    /**
+     * Remove any visible selection popover.
+     */
+    _removeSelectionPopover() {
+        const old = document.getElementById('selection-popover');
+        if (old) old.remove();
+    },
+
+    /**
+     * Set up the text-selection sharing popover inside the study view.
+     */
+    _setupSelectionShare() {
+        const container = document.getElementById('timeline-content');
+        if (!container) return;
+
+        document.addEventListener('selectionchange', () => {
+            this._removeSelectionPopover();
+
+            const sel = window.getSelection();
+            if (!sel || sel.isCollapsed) return;
+
+            const text = sel.toString().trim();
+            if (text.length < 10) return; // ignore tiny selections
+
+            // Make sure the selection is inside the study content
+            const range = sel.getRangeAt(0);
+            if (!container.contains(range.commonAncestorContainer)) return;
+
+            const rect = range.getBoundingClientRect();
+
+            const popover = document.createElement('div');
+            popover.id = 'selection-popover';
+            popover.className = 'selection-popover';
+            popover.innerHTML = `
+                <button class="sel-pop-btn" id="sel-share-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    Compartilhar trecho
+                </button>
+            `;
+
+            // Position above the selection
+            const scrollY  = window.scrollY;
+            const popTop   = rect.top + scrollY - 52;
+            const popLeft  = rect.left + rect.width / 2;
+
+            popover.style.cssText = `top:${popTop}px; left:${popLeft}px;`;
+            document.body.appendChild(popover);
+
+            document.getElementById('sel-share-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const captured = text;
+                this._removeSelectionPopover();
+                window.getSelection()?.removeAllRanges();
+                this.sharePassage(captured, this._currentStudyId);
+            });
+        });
+
+        // Remove popover when clicking elsewhere
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#selection-popover')) {
+                this._removeSelectionPopover();
+            }
+        });
+    },
+
+    /**
+     * Check URL params on load and open the correct study (deep-link support).
+     */
+    _handleDeepLink() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('study');
+        if (id && this.studies[id]) {
+            this.openStudy(id);
+        }
+    },
+
+    // ─── EXISTING LOGIC (unchanged) ─────────────────────────────────────────────
+
     init() {
         this.renderCards();
         this.setupHammer();
         this.checkCookies();
+        this._setupSelectionShare();
+        this._handleDeepLink();
         window.addEventListener('scroll', () => {
             this.handleScroll();
             this.handleNavScroll();
@@ -303,6 +476,13 @@ const App = {
         if (!study) return;
         const cat = this.categories[study.category];
 
+        // Track current study for sharing
+        this._currentStudyId = id;
+
+        // Update URL without page reload (for sharing / back-button support)
+        const url = this._studyUrl(id);
+        history.pushState({ study: id }, '', url);
+
         // Hide footer
         const footer = document.getElementById('home-footer');
         if (footer) footer.classList.add('hidden');
@@ -313,15 +493,15 @@ const App = {
         // Update hero
         document.getElementById('study-title').textContent = study.title;
         const eyebrow = document.getElementById('study-eyebrow');
-        if (eyebrow) eyebrow.textContent = cat.name;
+        if (eyebrow) { eyebrow.textContent = cat.name; eyebrow.style.color = cat.color; }
         const metaAuthor = document.getElementById('meta-author');
-        const metaDate = document.getElementById('meta-date');
+        const metaDate   = document.getElementById('meta-date');
         if (metaAuthor) metaAuthor.textContent = study.author;
-        if (metaDate) metaDate.textContent = study.date;
+        if (metaDate)   metaDate.textContent   = study.date;
 
-        // Update hero accent color
-        const heroEyebrow = document.getElementById('study-eyebrow');
-        if (heroEyebrow) heroEyebrow.style.color = cat.color;
+        // Update share button data
+        const shareBtn = document.getElementById('study-share-btn');
+        if (shareBtn) shareBtn.setAttribute('data-study-id', id);
 
         // Build timeline
         const container = document.getElementById('timeline-content');
@@ -376,6 +556,8 @@ const App = {
     },
 
     showHome() {
+        this._currentStudyId = null;
+        history.pushState({}, '', window.location.pathname);
         document.getElementById('study-view').classList.add('hidden');
         document.getElementById('home-view').classList.remove('hidden');
         const footer = document.getElementById('home-footer');
@@ -472,5 +654,13 @@ const App = {
     }
 };
 
+// Handle browser back/forward buttons
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.study) {
+        App.openStudy(e.state.study);
+    } else {
+        App.showHome();
+    }
+});
 
 App.init();
