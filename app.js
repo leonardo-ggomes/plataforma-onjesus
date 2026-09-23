@@ -262,7 +262,7 @@ const App = {
         {
             type: "quote",
             author: "- Romanos 12:2",
-            text: "\"Não imitem o comportamento e os costumes deste mundo, mas deixem que Deus os transforme por meio de uma mudança em seu modo de pensar, a fim de que experimentem a boa, agradável e perfeita vontade de Deus para vocês.\""
+            text: "Não imitem o comportamento e os costumes deste mundo, mas deixem que Deus os transforme por meio de uma mudança em seu modo de pensar, a fim de que experimentem a boa, agradável e perfeita vontade de Deus para vocês."
         },
         {
             type: "intro",
@@ -290,7 +290,7 @@ const App = {
         {
             type: "quote",
             author: "Mateus 5:13",
-            text: "13 “Vocês são o sal da terra. Mas, se o sal perder o sabor, para que servirá? É possível torná-lo salgado outra vez? Será jogado fora e pisado pelos que passam, pois já não serve para nada."
+            text: "Vocês são o sal da terra. Mas, se o sal perder o sabor, para que servirá? É possível torná-lo salgado outra vez? Será jogado fora e pisado pelos que passam, pois já não serve para nada."
         },
         {
             type: "intro",
@@ -319,13 +319,13 @@ const App = {
             content: [
                     "Ser cristão na escola não significa ser o dono da verdade na sala de aula, mas ser alguém que aponta para ela através do serviço, da honestidade e do amor. Quando decidimos estudar com dedicação, respeitar as autoridades escolares e estender a mão a quem precisa,  mostramos a verdade da nossa fé na prática.",
                     "Para muitos Jovens Cristãos a escola não é um ambiente saudável, e de fato não é, Mas é onde Deus nos colocou para ser luz, não devemos apenas olhar para os problemas, mas para as oportunidades que temos de Mostrar o seu amor.",
-                    "\"As palavras explicam a nossa fé, mas são as nossas atitudes que provam que ela é real.\""
+                    "As palavras explicam a nossa fé, mas são as nossas atitudes que provam que ela é real."
             ]
         },
         {
             type: "quote",
             author: "- 1Timóteo 4:12",
-            text: "\"Não deixe que ninguém o menospreze porque você é jovem. Seja exemplo para todos os fiéis nas palavras, na conduta, no amor, na fé e na pureza.\""
+            text: "Não deixe que ninguém o menospreze porque você é jovem. Seja exemplo para todos os fiéis nas palavras, na conduta, no amor, na fé e na pureza."
         }
     ],
 },
