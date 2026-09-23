@@ -256,7 +256,7 @@ const App = {
             image: "/res/img_6.jpg",
             head: "O Cristão na Escola",
             content: [
-                    "Sentar na cadeira da sala de aula, caminhar pelo pátio nos intervalos ou dividir a mesa no horário do lanche são tarefas comuns, mas que ganham um peso diferente para quem carrega princípios cristãos. Os ambientes escolares não são apenas um lugar para obter notas ou aprovação acadêmica, para nós jovens cristãos, ela é o nosso campo missionário. É nesse ambiente, onde passamos a maior parte da nossa semana, que a nossa fé deixa de ser apenas uma prática dos Domingos e se torna uma prática de segunda a sexta. E, sejamos sinceros, manter-se firme quando a correnteza puxa para o outro lado é um grande desafio e uma luta diária."
+                    "Sentar na cadeira da sala de aula, caminhar pelo pátio nos intervalos ou dividir a mesa no horário do lanche são tarefas comuns, mas que ganham um peso diferente para quem carrega princípios cristãos. Os ambientes escolares não são apenas um lugar para obter notas ou aprovação acadêmica, para nós jovens cristãos, ela é o nosso campo missionário. É nesse ambiente, onde passamos a maior parte da nossa semana, que a nossa fé deixa de ser apenas uma prática dos domingos e se torna uma prática de segunda a sexta. E, sejamos sinceros, manter-se firme quando a correnteza puxa para o outro lado é um grande desafio e uma luta diária."
             ]
         },
         {
@@ -269,7 +269,7 @@ const App = {
             image: "",
             head: "PRECISAMOS NOS POSICIONAR!",
             content: [
-                    "Muitas vezes, a escola será o único lugar onde as pessoas ao nosso redor terão algum contato com o evangelho. Nossos colegas podem nunca abrir uma Bíblia ou pisar em uma igreja, mas eles prestam atenção em como reagimos, como conversamos e como tratamos os outros. De certa forma, as nossas atitudes diárias funcionam como uma tradução prática de quem é Cristo (isso é ser Cristão)."
+                    "Muitas vezes, a escola será o único lugar onde as pessoas ao nosso redor terão algum contato com o evangelho. Nossos colegas podem nunca abrir uma Bíblia ou pisar em uma igreja, mas eles prestam atenção em como reagimos, como conversamos e como tratamos os outros. De certa forma, as nossas atitudes diárias funcionam como uma tradução prática de quem é Cristo (isso é ser cristão)."
             ]
         },
         {
@@ -283,7 +283,7 @@ const App = {
             head: "Sal e Luz na Sala de Aula",
             content: [
                     "Ser cristão na escola não significa que você deve virar as costas para os seus amigos, isolar-se no canto ou viver em uma \"bolha\" fechada. O papel do cristão não é se afastar das pessoas por medo de se contaminar, mas sim manter a própria identidade perto delas.",
-                    "-A atitude: Continue convivendo com a seus amigos, conversando e participando do dia a dia deles. Se eles começarem a falar besteiras, palavrões ou piadas pesadas, você não precisa fazer um sermão ou ir embora irritado;",
+                    "-A atitude: Continue convivendo com seus amigos, conversando e participando do dia a dia deles. Se eles começarem a falar besteiras, palavrões ou piadas pesadas, você não precisa fazer um sermão ou ir embora irritado;",
                     "basta não participar. Não alimente o assunto, não ria e não valide esse comportamento. Com o tempo, a sua postura firme e o seu silêncio nessas horas vão falar mais alto do que qualquer discurso."
             ]
         },
@@ -295,7 +295,7 @@ const App = {
         {
             type: "intro",
             image: "/res/img_7.jpg",
-            head: "• Sendo Resposta para quem Precisa de Deus",
+            head: " Sendo Resposta para quem Precisa de Deus",
             content: [
                     "O ambiente escolar é um reflexo do mundo fora dele: cheio de jovens que andam vazios, lidando com pressões familiares profundas, crises de identidade, ausência de fé ou buscando respostas em lugares errados. Muitas pessoas na nossa sala nunca ouviram falar do amor de Deus de forma real e sem julgamentos.",
                     "-A atitude: O testemunho, nesses casos, começa com empatia e convivência. Antes de apresentar uma doutrina, ofereça um relacionamento saudável e sincero. Sentar-se perto de quem é deixado de lado, demonstrar interesse genuíno pelo bem-estar do colega e saber ouvir são pontes que demonstram o caráter de Cristo na prática. O acolhimento prepara o terreno para a mensagem."
@@ -309,7 +309,7 @@ const App = {
                     "-Existe um ponto crucial nessa caminhada:",
                     "VOCÊ VAI ERRAR.",
                     "Em algum dia ruim, a paciência vai sumir, uma palavra errada vai escapar ou um posicionamento vai falhar. Todos nós seguimos lutando diariamente contra as nossas próprias fraquezas. O peso de tentar parecer um cristão \"perfeito\" aos olhos dos outros na escola pode ser paralisante, mas o evangelho não nos exige perfeição, exige sinceridade.",
-                    "Todos nós estamos inclinados ao pecado, porém a forma como qual reagimos após o erro, mostra qual fé estamos vivendo, se ao cairmos, nos arrependemos e buscamos melhorar."
+                    "Todos nós estamos inclinados ao pecado, porém a forma pela qual reagimos após o erro mostra qual fé estamos vivendo. Se, ao cairmos, nos arrependemos e buscamos melhorar."
             ]
         },
         {
@@ -317,8 +317,8 @@ const App = {
             image: "",
             head: "Conclusão e Conselho final",
             content: [
-                    "Ser cristão na escola não significa ser o dono da verdade na sala de aula, mas ser alguém que aponta para ela através do serviço, da honestidade e do amor. Quando decidimos estudar com dedicação, respeitar as autoridades escolares e estender a mão a quem precisa,  mostramos a verdade da nossa fé na prática.",
-                    "Para muitos Jovens Cristãos a escola não é um ambiente saudável, e de fato não é, Mas é onde Deus nos colocou para ser luz, não devemos apenas olhar para os problemas, mas para as oportunidades que temos de Mostrar o seu amor.",
+                    "Ser cristão na escola não significa ser o dono da verdade na sala de aula, mas ser alguém que aponta para ela através do serviço, da honestidade e do amor. Quando decidimos estudar com dedicação, respeitar as autoridades escolares e estender a mão a quem precisa, mostramos a verdade da nossa fé na prática.",
+                    "Para muitos jovens cristãos a escola não é um ambiente saudável, e de fato não é, mas é onde Deus nos colocou para ser luz, não devemos apenas olhar para os problemas, mas para as oportunidades que temos de mostrar o seu amor.",
                     "As palavras explicam a nossa fé, mas são as nossas atitudes que provam que ela é real."
             ]
         },
