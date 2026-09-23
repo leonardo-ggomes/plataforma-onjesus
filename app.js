@@ -243,7 +243,28 @@ const App = {
                     text: "pois todos pecaram e estão destituídos da glória de Deus, sendo justificados gratuitamente por sua graça, por meio da redenção que há em Cristo Jesus."
                 },
             ]
+        },o_cristao_em_ambiente_escolar: {
+    title: "O Cristão em ambiente escolar",
+    category: "sabedoria",
+    author: "Eduardo Kauffmann",
+    date: "23/09/2026",
+    image: "/res/nome.jpg6",
+    icon: "📖",
+    steps: [
+        {
+            type: "intro",
+            image: "",
+            head: "",
+            content: [
+            ]
+        },
+        {
+            type: "quote",
+            author: "",
+            text: ""
         }
+    ],
+},
     },
 
     // ─── SHARING ────────────────────────────────────────────────────────────────
